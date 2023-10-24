@@ -6,12 +6,12 @@ import Login from "../pages/Login";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Login />,
     errorElement: <h1>NOT FOUND</h1>,
   },
   {
-    path: "/Login",
-    element: <Login />,
+    path: "/home",
+    element: <Home />,
   },
 ]);
 
