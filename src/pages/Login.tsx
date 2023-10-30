@@ -20,16 +20,12 @@ function Login() {
       password: e.currentTarget.password.value,
     };
 
-    console.log(user);
-
     const response = await login(user);
 
-    // console.log(login(user));
-
-    console.log(response);
-
     if (!response || response.code !== 200) {
-      alert("Username ou senha incorretos.");
+      alert(
+        "Os dados de acesso fornecidos estão incorretos. Por favor, verifique seu nome de usuário e senha e tente novamente."
+      );
       return;
     }
 
@@ -45,7 +41,7 @@ function Login() {
         <LoginCard>
           <Welcome>
             <h1>Growtwitter</h1>
-            <p id="trabalho">Trabalho final do bloco intermediário</p>
+            <p id="work">Trabalho final do bloco intermediário</p>
             <p>
               O Growtwitter é a plataforma definitiva para todos os apaixonados
               por redes sociais que buscam uma experiência familiar e poderosa,

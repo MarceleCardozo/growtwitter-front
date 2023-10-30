@@ -30,7 +30,7 @@ export const Welcome = styled.div`
   justify-content: center;
   border-radius: 8px;
 
-  #trabalho {
+  #work {
     margin: 12px 0px;
     font-size: 12px;
   }
@@ -93,5 +93,6 @@ export const InputGroup = styled.div`
     background-color: rgb(29, 155, 240);
     color: rgb(250, 250, 250);
     padding: 8px 4px;
+    cursor: pointer;
   }
 `;
