@@ -23,7 +23,11 @@ export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
       tweetId: objTweet.tweetId,
     };
 
-    const response = await apiService.post("/tweets", tweet);
+    const token = localStorage.getItem("token");
+
+    const response = await apiService.post("/tweets", tweet, {
+      headers: { Authorization: token },
+    });
 
     return {
       code: response.data?.code,
@@ -41,7 +45,12 @@ export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
 
 export async function list() {
   try {
-    const response = await apiService.get("/tweets");
+    const token = localStorage.getItem("token");
+
+    const response = await apiService.get("/tweets", {
+      headers: { Authorization: token },
+    });
+
     return {
       code: response.data?.code,
       message: response.data?.message,

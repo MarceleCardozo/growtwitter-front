@@ -11,7 +11,12 @@ export async function login(objLogin: LoginRequest): Promise<ResponseAPI> {
   try {
     console.log(objLogin, "objlogin");
     console.log("entrou no catch");
-    const response = await apiService.post("/auth/login", objLogin);
+
+    const token = localStorage.getItem("token");
+
+    const response = await apiService.post("/auth/login", objLogin, {
+      headers: { Authorization: token },
+    });
 
     console.log(response, "auth");
 

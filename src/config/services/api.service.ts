@@ -3,10 +3,9 @@ import axios from "axios";
 
 const apiService = axios.create({
   baseURL: "http://localhost:3333",
-  headers: {
-    Authorization: localStorage.getItem("token"),
-  },
 });
+
+console.log(apiService.head);
 
 export default apiService;
 

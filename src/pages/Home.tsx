@@ -2,8 +2,9 @@ import styled from "styled-components";
 import Sidebar from "../components/SideBar";
 import Timeline from "../components/Timeline";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SessionWhatsHappening from "../components/SessionWhatsHappening";
+import { UserDto, listMe } from "../config/services/user.service"; // Importe a função list e a interface UserDto
 
 const PageContainer = styled.div`
   display: flex;
@@ -11,19 +12,26 @@ const PageContainer = styled.div`
 
 function Home() {
   const navigate = useNavigate();
+  const [loggedInUser, setLoggedInUser] = useState<UserDto | undefined>();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      navigate("/login");
+      navigate("/");
       return;
     }
-  });
+
+    async function me() {
+      const res = await listMe();
+      setLoggedInUser(res.data);
+    }
+    me();
+  }, [navigate]);
 
   return (
     <PageContainer>
-      <Sidebar />
+      <Sidebar loggedInUser={loggedInUser} />
       <Timeline />
       <SessionWhatsHappening />
     </PageContainer>

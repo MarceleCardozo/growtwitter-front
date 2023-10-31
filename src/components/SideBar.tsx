@@ -73,7 +73,7 @@ const UserLogoutLink = styled.a`
 `;
 
 interface SideBarProps {
-  loggedInUser: UserDto;
+  loggedInUser?: UserDto;
 }
 
 function Sidebar(props: SideBarProps) {
@@ -82,11 +82,11 @@ function Sidebar(props: SideBarProps) {
   const [loggedInUser, setLoggedInUser] = useState<UserDto>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log(props.loggedInUser);
   console.log(loggedInUser);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log("Token:", token);
 
     if (!token) {
       navigate("/");
@@ -160,9 +160,9 @@ function Sidebar(props: SideBarProps) {
             imageUrl={`https://www.gravatar.com/avatar/${loggedInUser?.id}?d=robohash`}
           />
           <div style={{ margin: "10px" }}>
-            <Name>{loggedInUser?.name}Name</Name>
+            <Name>{loggedInUser?.name}</Name>
             <Username style={{ color: "gray" }}>
-              @{loggedInUser?.username}Username
+              @{loggedInUser?.username}
             </Username>
           </div>
         </UserAvatarSection>
