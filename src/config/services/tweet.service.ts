@@ -67,3 +67,25 @@ export async function list() {
     };
   }
 }
+
+export async function listAllByUser(userId: string) {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await apiService.get(`/tweets/${userId}`, {
+      headers: { Authorization: token },
+    });
+
+    return {
+      code: response.data?.code,
+      message: response.data?.message,
+      data: response.data?.data,
+    };
+  } catch (error: any) {
+    return {
+      code: error.response?.data?.code,
+      message: error.response?.data?.message,
+      data: error.response?.data?.data,
+    };
+  }
+}

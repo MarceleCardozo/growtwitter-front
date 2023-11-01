@@ -1,69 +1,71 @@
+import {
+  BodyTimeline,
+  Container,
+  Content,
+  CustomContainer,
+  Icons,
+  Line,
+  SmallDot,
+} from "./Timeline";
+import backButton from "../images/icone_seta.svg";
 import styled from "styled-components";
-import comment from "../images/ICONE_COMENTARIOS_STROKE.svg";
 import { useEffect, useState } from "react";
-import { TweetDTO, list } from "../config/services/tweet.service";
-import { Avatar, Name, Username } from "./User";
+import { TweetDTO, listAllByUser } from "../config/services/tweet.service";
 import { UserDto, listMe } from "../config/services/user.service";
 import { create, deleteLike } from "../config/services/like.service";
+import { Avatar, Name, Username } from "./User";
+import comment from "../images/ICONE_COMENTARIOS_STROKE.svg";
 
-export const BodyTimeline = styled.div`
-  border: 1px solid rgb(216, 215, 215);
-  width: 60%;
-
-  h1 {
-    font-size: x-large;
-    margin: 15px;
-  }
-`;
-
-export const Line = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: rgb(216, 215, 215);
-`;
-
-export const Container = styled.div`
+const UserProfileContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
 `;
 
-export const Content = styled.p`
-  margin: 0;
+const BackButtonImage = styled.img`
+  margin: 30px 20px;
+  width: 20px;
+  height: 20px;
 `;
 
-export const SmallDot = styled.div`
-  width: 4px;
-  height: 4px;
-  background-color: black;
+const TextContainer = styled.div`
+  margin: 20px;
+`;
+
+const Header = styled.h2`
+  font-size: medium;
+`;
+
+const Subtitle = styled.small`
+  color: rgb(196, 196, 196);
+`;
+
+const UserAvatar = styled.div<{ imageUrl: string }>`
+  background-image: url(${(props) => props.imageUrl});
+  background-size: cover;
+  align-self: flex-start;
+  width: 100px;
+  height: 100px;
   border-radius: 100%;
+  margin-left: 20px;
+  border: 3px solid gray;
 `;
 
-export const CustomContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
+const NameProfile = styled.h3`
+  font-size: large;
 `;
 
-export const Icons = styled.div`
-  margin: 10px 10px 0px 0px;
-  display: flex;
-  cursor: pointer;
-
-  svg {
-    margin-right: 5px;
-    align-self: center;
-  }
+const UsernameProfile = styled.p`
+  font-size: medium;
+  color: rgb(196, 196, 196);
 `;
 
-export default function Timeline() {
+function UserProfile() {
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [loggedInUser, setLoggedInUser] = useState<UserDto>();
 
   useEffect(() => {
     async function fetchData() {
       const user = await listMe();
-      const tweetList = await list();
+      const tweetList = await listAllByUser(user.data.id);
       setLoggedInUser(user.data);
       setTweets(tweetList.data);
     }
@@ -127,21 +129,36 @@ export default function Timeline() {
     }
   }
 
+  console.log(tweets, "tweets");
+
   return (
     <BodyTimeline>
-      <h1>Página Inicial</h1>
+      <UserProfileContainer>
+        <BackButtonImage src={backButton} alt="" />
+        <TextContainer>
+          <Header>Perfil de @{loggedInUser?.username}</Header>
+          <Subtitle>{tweets.length} tweets</Subtitle>
+        </TextContainer>
+      </UserProfileContainer>
+      <UserAvatar
+        imageUrl={`https://www.gravatar.com/avatar/${loggedInUser?.id}?d=robohash`}
+      />
+      <div style={{ margin: "10px" }}>
+        <NameProfile>{loggedInUser?.name}</NameProfile>
+        <UsernameProfile>@{loggedInUser?.username}</UsernameProfile>
+      </div>
       <Line />
       {tweets &&
         tweets.map((tweet, index) => (
           <div key={index}>
             <Container>
               <Avatar
-                imageUrl={`https://www.gravatar.com/avatar/${tweet.User.id}?d=robohash`}
+                imageUrl={`https://www.gravatar.com/avatar/${tweet.userId}?d=robohash`}
               />
               <div style={{ margin: "1rem" }}>
                 <CustomContainer>
-                  <Name>{tweet.User.name}</Name>
-                  <Username>@{tweet.User.username}</Username>
+                  <Name>{tweet.User?.name}</Name>
+                  <Username>@{tweet.User?.username}</Username>
                   <SmallDot />
                   <p>3h</p>
                 </CustomContainer>
@@ -193,3 +210,5 @@ export default function Timeline() {
     </BodyTimeline>
   );
 }
+
+export default UserProfile;

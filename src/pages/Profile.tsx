@@ -3,6 +3,8 @@ import Sidebar from "../components/SideBar";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { UserDto, listMe } from "../config/services/user.service"; // Importe a função list e a interface UserDto
+import UserProfile from "../components/UserProfile";
+import SessionWhatsHappening from "../components/SessionWhatsHappening";
 
 const PageContainer = styled.div`
   display: flex;
@@ -30,6 +32,8 @@ function Profile() {
   return (
     <PageContainer>
       <Sidebar loggedInUser={loggedInUser} />
+      <UserProfile />
+      <SessionWhatsHappening />
     </PageContainer>
   );
 }

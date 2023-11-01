@@ -26,6 +26,7 @@ function Home() {
       const res = await listMe();
       setLoggedInUser(res.data);
     }
+
     me();
   }, [navigate]);
 
