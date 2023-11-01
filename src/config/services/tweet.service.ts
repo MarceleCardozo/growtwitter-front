@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import apiService, { ResponseAPI } from "./api.service";
+import { LikeDto } from "./like.service";
 import { UserDto } from "./user.service";
 
 export interface TweetRequest {
@@ -13,6 +14,7 @@ export interface TweetDTO {
   userId: string;
   content: string;
   User: UserDto;
+  Likes: LikeDto[];
 }
 
 export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
