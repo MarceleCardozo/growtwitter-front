@@ -23,7 +23,7 @@ const Box = styled.div`
   }
 `;
 
-const CustomContainer = styled.div`
+export const CustomContainer = styled.div`
   margin: 15px 10px;
 
   small {

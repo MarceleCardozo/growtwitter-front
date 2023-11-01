@@ -6,7 +6,7 @@ import { Avatar, Name, Username } from "./User";
 import { UserDto, listMe } from "../config/services/user.service";
 import { create, deleteLike } from "../config/services/like.service";
 
-const BodyTimeline = styled.div`
+export const BodyTimeline = styled.div`
   border: 1px solid rgb(216, 215, 215);
   width: 60%;
 
@@ -16,7 +16,7 @@ const BodyTimeline = styled.div`
   }
 `;
 
-const Line = styled.div`
+export const Line = styled.div`
   width: 100%;
   height: 1px;
   background-color: rgb(216, 215, 215);
