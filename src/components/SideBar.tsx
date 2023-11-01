@@ -6,7 +6,7 @@ import profileIcon from "../images/icone_perfil.svg";
 import Button from "./Button";
 import { Avatar, Name, Username } from "./User";
 import { useLocation, useNavigate } from "react-router-dom";
-import { UserDto } from "../config/services/user.service";
+import { UserDto, listMe } from "../config/services/user.service";
 import { useEffect, useState } from "react";
 import Modal from "./Modal";
 
@@ -72,17 +72,13 @@ const UserLogoutLink = styled.a`
   color: black;
 `;
 
-interface SideBarProps {
-  loggedInUser?: UserDto;
-}
-
-function Sidebar(props: SideBarProps) {
+function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [loggedInUser, setLoggedInUser] = useState<UserDto>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log(loggedInUser);
+  console.log(loggedInUser, "logged");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -93,10 +89,13 @@ function Sidebar(props: SideBarProps) {
       return;
     }
 
-    if (props.loggedInUser) {
-      setLoggedInUser(props.loggedInUser);
+    async function fetchLoggedInUser() {
+      const res = await listMe();
+      setLoggedInUser(res.data);
     }
-  }, [navigate, props.loggedInUser]);
+
+    fetchLoggedInUser();
+  }, [navigate]);
 
   useEffect(() => {
     console.log("montou o componente");
