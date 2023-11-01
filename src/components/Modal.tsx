@@ -73,9 +73,10 @@ interface ModalProps {
   onClose: () => void;
   children?: React.ReactNode;
   tweet?: TweetDTO;
+  userId?: string;
 }
 
-function Modal({ isOpen, onClose, children, tweet }: ModalProps) {
+function Modal({ isOpen, onClose, children, userId }: ModalProps) {
   const [editableContent, setEditableContent] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -85,10 +86,12 @@ function Modal({ isOpen, onClose, children, tweet }: ModalProps) {
   async function createTweet(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
+    console.log(userId, "tweet 123");
+
     const tweetCreate: TweetRequest = {
       content: editableContent,
       type: "tweet",
-      tweetId: tweet?.id,
+      userId: userId,
     };
 
     const response = await create(tweetCreate);

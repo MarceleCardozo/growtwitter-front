@@ -11,6 +11,7 @@ export interface LikeDto {
 
 export async function create(data: LikeDto) {
   try {
+    console.log(data, "data ###");
     const like = {
       userId: data.userId,
       tweetId: data.tweetId,

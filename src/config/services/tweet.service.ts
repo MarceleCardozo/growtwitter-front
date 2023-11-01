@@ -6,7 +6,7 @@ import { UserDto } from "./user.service";
 export interface TweetRequest {
   content: string;
   type: "tweet" | "retweet";
-  tweetId?: string;
+  userId?: string;
 }
 
 export interface TweetDTO {
@@ -19,15 +19,16 @@ export interface TweetDTO {
 
 export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
   try {
+    console.log(objTweet, "objTweet $$$");
     const tweet = {
       content: objTweet.content,
       type: objTweet.type,
-      tweetId: objTweet.tweetId,
+      userId: objTweet.userId,
     };
 
     const token = localStorage.getItem("token");
 
-    const response = await apiService.post("/tweets", tweet, {
+    const response = await apiService.post(`/tweets/${tweet.userId}`, tweet, {
       headers: { Authorization: token },
     });
 

@@ -169,7 +169,11 @@ function Sidebar(props: SideBarProps) {
         <UserLogoutLink onClick={logout}>Sair</UserLogoutLink>
       </SidebarUserSection>
 
-      <Modal isOpen={isModalOpen} onClose={closeModal} />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        userId={loggedInUser?.id}
+      />
     </BodySidebar>
   );
 }

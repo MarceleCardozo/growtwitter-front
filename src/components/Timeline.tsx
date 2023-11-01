@@ -48,6 +48,7 @@ const CustomContainer = styled.div`
 const Icons = styled.div`
   margin: 10px 10px 0px 0px;
   display: flex;
+  cursor: pointer;
 
   svg {
     margin-right: 5px;
@@ -69,14 +70,17 @@ export default function Timeline() {
     fetchData();
   }, []);
 
-  async function like(tweetId: string, index: number) {
+  async function like(tweetId: string, index: number, userId: string) {
     const userLiked = tweets[index].Likes.some(
       (like) => like.userId === loggedInUser!.id
     );
 
+    console.log(userLiked);
+
     if (!userLiked) {
       const dataCreate = {
         tweetId: tweetId,
+        userId: userId,
       };
 
       const copy = [...tweets];
@@ -158,7 +162,7 @@ export default function Timeline() {
                       viewBox="0 0 11 10"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      onClick={() => like(tweet.id, index)}
+                      onClick={() => like(tweet.id, index, tweet.userId)}
                     >
                       <g clipPath="url(#clip0_83_2222)">
                         <path
