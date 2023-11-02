@@ -61,23 +61,26 @@ const UsernameProfile = styled.p`
 function UserProfile() {
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [loggedInUser, setLoggedInUser] = useState<UserDto>();
+  const [updateTimeLine, setUpdateTimeLine] = useState(true);
 
+  async function fetchData() {
+    const user = await listMe();
+    const tweetList = await listAllByUser(user.data.id);
+    setLoggedInUser(user.data);
+    setTweets(tweetList.data);
+  }
   useEffect(() => {
-    async function fetchData() {
-      const user = await listMe();
-      const tweetList = await listAllByUser(user.data.id);
-      setLoggedInUser(user.data);
-      setTweets(tweetList.data);
+    if (updateTimeLine) {
+      fetchData();
     }
-    fetchData();
-  }, []);
+    // apos buscar os tweets ao abrir a pagina, retorna para false, se fosse verdadeiro ainda rodaria o useEffect infinitamente
+    setUpdateTimeLine(false);
+  }, [updateTimeLine]);
 
   async function like(tweetId: string, index: number, userId: string) {
     const userLiked = tweets[index].Likes.some(
       (like) => like.userId === loggedInUser!.id
     );
-
-    console.log(userLiked);
 
     if (!userLiked) {
       const dataCreate = {
@@ -88,45 +91,31 @@ function UserProfile() {
       const copy = [...tweets];
       copy[index].Likes.push({
         id: "",
-        tweetId: "",
+        tweetId: tweetId,
         userId: loggedInUser!.id,
       });
 
       setTweets(copy);
 
       const createLike = await create(dataCreate);
-
-      const indexLike = tweets![index].Likes.findIndex(
-        (l) => l.userId === loggedInUser
-      );
-
-      const copy2 = [...tweets!];
-
-      copy[index].Likes[indexLike] = {
-        id: createLike.data.id,
-        tweetId: createLike.data.tweetId,
-        userId: createLike.data.userId,
-      };
-      setTweets(copy2);
-
       console.log(createLike);
     } else {
-      const indexLike = tweets![index].Likes.findIndex(
-        (l) => l.userId === loggedInUser!.id
+      const indexLike = tweets[index].Likes.findIndex(
+        (like) => like.userId === loggedInUser!.id
       );
 
       const dataToDelete = {
-        id: tweets![index].Likes[indexLike].id,
+        id: tweets[index].Likes[indexLike].id,
       };
 
-      const copy = [...tweets!];
+      const copy = [...tweets];
       copy[index].Likes.splice(indexLike, 1);
       setTweets(copy);
 
       const del = await deleteLike(dataToDelete);
-
       console.log(del);
     }
+    setUpdateTimeLine(true);
   }
 
   console.log(tweets, "tweets");

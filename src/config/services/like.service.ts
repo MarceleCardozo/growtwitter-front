@@ -39,6 +39,8 @@ export async function create(data: LikeDto) {
 
 export async function deleteLike(data: LikeDto) {
   try {
+    console.log(data, "data like");
+
     const like = {
       id: data.id,
     };

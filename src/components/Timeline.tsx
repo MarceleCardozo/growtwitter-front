@@ -59,28 +59,37 @@ export const Icons = styled.div`
 export default function Timeline() {
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [loggedInUser, setLoggedInUser] = useState<UserDto>();
+  // inicializa como true para buscar os tweets
+  const [updateTimeLine, setUpdateTimeLine] = useState(true);
 
+  async function fetchData() {
+    const user = await listMe();
+    const tweetList = await list();
+    setLoggedInUser(user.data);
+    setTweets(tweetList.data);
+  }
   useEffect(() => {
-    async function fetchData() {
-      const user = await listMe();
-      const tweetList = await list();
-      setLoggedInUser(user.data);
-      setTweets(tweetList.data);
+    if (updateTimeLine) {
+      fetchData();
     }
-    fetchData();
-  }, []);
+    // apos buscar os tweets ao abrir a pagina, retorna para false, se fosse verdadeiro ainda rodaria o useEffect infinitamente
+    setUpdateTimeLine(false);
+  }, [updateTimeLine]);
 
-  async function like(tweetId: string, index: number, userId: string) {
+  async function like(tweetId: string, index: number) {
+    console.log(loggedInUser, "logged in user");
     const userLiked = tweets[index].Likes.some(
       (like) => like.userId === loggedInUser!.id
     );
 
-    console.log(userLiked);
+    console.log(tweetId, "TWEETID @@@@@@@");
+
+    console.log(userLiked, "userLiked");
 
     if (!userLiked) {
       const dataCreate = {
         tweetId: tweetId,
-        userId: userId,
+        userId: loggedInUser?.id,
       };
 
       const copy = [...tweets];
@@ -93,7 +102,7 @@ export default function Timeline() {
       setTweets(copy);
 
       const createLike = await create(dataCreate);
-
+      console.log(createLike, "createLike");
       const indexLike = tweets![index].Likes.findIndex(
         (l) => l.userId === loggedInUser
       );
@@ -113,9 +122,14 @@ export default function Timeline() {
         (l) => l.userId === loggedInUser!.id
       );
 
+      console.log(indexLike, "indexLike");
+
       const dataToDelete = {
         id: tweets![index].Likes[indexLike].id,
       };
+
+      console.log(dataToDelete, "dataToDelete");
+      console.log(tweets, "tweets");
 
       const copy = [...tweets!];
       copy[index].Likes.splice(indexLike, 1);
@@ -125,6 +139,8 @@ export default function Timeline() {
 
       console.log(del);
     }
+    // seta para verdadeiro para atualizar a pagina
+    setUpdateTimeLine(true);
   }
 
   return (
@@ -162,7 +178,7 @@ export default function Timeline() {
                       viewBox="0 0 11 10"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      onClick={() => like(tweet.id, index, tweet.userId)}
+                      onClick={() => like(tweet.id, index)}
                     >
                       <g clipPath="url(#clip0_83_2222)">
                         <path
