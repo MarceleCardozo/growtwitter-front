@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const apiService = axios.create({
-  baseURL: "http://localhost:3333",
+  baseURL: "https://atividade-final-backend-2.onrender.com",
 });
 
 console.log(apiService.head);
