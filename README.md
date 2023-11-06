@@ -1,1 +1,1 @@
-https://vercel.com/marcelecardozo/growtwitter-front
+https://growtwitter-front-phi.vercel.app/
